@@ -1,0 +1,57 @@
+// 垂直水平居中方法
+@mixin center($type: false) {
+  display: flex;
+  align-items: center;
+  @if $type{
+    justify-content: center;
+  }
+}
+
+// 下划线
+@mixin border-1px($color) {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: $color;
+  transform: scaleY(.5);
+}
+
+// 图片
+@mixin bg-image($url) {
+  background-image: url("./image/"+$url + "@2x.png");
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    {
+      background-image: url("./image/"+$url + "@3x.png")
+    }
+}
+
+// 文字超出隐藏
+@mixin textHide() {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+// 重写按钮样式
+@mixin newBt($color) {
+  margin: 0 2px;
+  padding: 0;
+  width: 40px;
+  height: 20px;
+  line-height: 20px;
+  box-sizing: border-box;
+  border: 1px solid $color;
+  border-radius: 5px;
+  color: $color;
+  background: none;
+  font-size: 12px;
+}
+
+// 字体小于12px的方法
+@mixin smallFont ($scale) {
+  -webkit-transform-origin: 0% 0%;
+  -webkit-transform: scale($scale);
+}
