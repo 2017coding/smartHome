@@ -33,7 +33,7 @@ const app = {
     }, data) {
       return new Promise((resolve, reject) => {
         setGatewayDataStorage(data.gatewayList)
-        commit('SET_GATEWAYDAT', data)
+        commit('SET_GATEWAYDAT', data.gatewayList)
         resolve()
       })
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="area" v-if="gatewayData && gatewayData[0]">
+    <div class="area">
       <swiper
         :indicator-dots="indicatorDots" 
         :autoplay="autoplay" 
@@ -10,13 +10,19 @@
         @change="_swiperChange">
         <div v-for="(item, index) in gatewayData[1].zoneList" :key="index">
           <swiper-item>
-            <image :src="item.zonePhoto" class="slide-image"/>
+            <image :src="item.zonePhoto || 'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg'" class="slide-image"/>
           </swiper-item>
         </div>
       </swiper>
     </div>
-    <div class="device">
-    </div>
+    <ul class="device-list">
+      <li class="item" v-for="(item, index) in gatewayData[1].zoneList[zoneIndex].deviceList" :key="index">
+        <i class="icon"></i>
+        <span class="name">{{item.eleName}}</span>
+        <span>{{item.parameterList ? item.parameterList[0].value : ''}}</span>
+      </li>
+      <p v-if="gatewayData[1].zoneList[zoneIndex].deviceList.length === 0" style="font-size: 20px; font-weight: bold; text-align: center; height: 60px; line-height: 60px">当前区域下暂无设备</p>
+    </ul>
   </div>
 </template>
 
@@ -32,29 +38,21 @@ export default {
   data () {
     return {
       indicatorDots: true,
-      autoplay: true,
+      autoplay: false,
       interval: 5000,
       duration: 900,
       circular: true,
-      imgUrls: [
-        'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
-        'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
-        'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
-      ]
+      zoneIndex: 0
     }
   },
-  created () {
-    // this._initData().then(() => {
-      // this.selectGatewayInfo
-    // })
-    console.log(this.gatewayData)
+  mounted () {
   },
   methods: {
     // 初始化数据,得到选择的网关信息
     _initData () {
     },
     _swiperChange (e) {
-      console.log('第' + e.mp.detail.current + '张轮播图发生了滑动')
+      this.zoneIndex = e.mp.detail.current
     },
     ...mapMutations({
       SETSELECTGATEWAYINFO: 'SET_SELECTGATEWAYINFO'
@@ -67,13 +65,25 @@ export default {
 @import '@/common/scss/index.scss';
 
 .home{
-  @include center($type: true);
-  flex-direction: column;
+  // @include center($type: true);
+  // flex-direction: column;
   position: relative;
   .area{
     width: 100%;
     image{
       width: 100%;
+    }
+  }
+  .device-list{
+    .item{
+      @include center($type: true);
+      margin-top: 10px;
+      padding: 0 20px;
+      height: 40px;
+      background: $backgorund;
+    }
+    .name{
+      flex: 1;
     }
   }
 }

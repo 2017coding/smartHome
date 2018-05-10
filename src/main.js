@@ -23,14 +23,14 @@ export default {
       backgroundTextStyle: 'light',
       frontColor: '#ffffff',
       navigationBarBackgroundColor: '#252939',
-      navigationBarTitleText: 'SmartPower',
+      navigationBarTitleText: 'SmartHome',
       navigationBarTextStyle: '#ffffff'
     },
     tabBar: {
       color: '#6a6a6f',
       selectedColor: '#eaa01d',
       borderStyle: 'white',
-      backgroundColor: 'rgb(230, 230, 230)',
+      backgroundColor: 'white',
       list: [
         {
           text: '首页',

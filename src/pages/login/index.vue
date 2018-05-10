@@ -157,12 +157,13 @@
 </script>
 
 <style lang="scss">
-  @import '@/common/scss/mixin.scss';
+  @import '@/common/scss/index.scss';
 
   $imgSize: 20vh;
 
   .login{
     height: 100%;
+    background: $backgorund;
     .logo{
       @include center($type: true);
       height: 35%;
