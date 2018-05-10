@@ -12,19 +12,20 @@
         <i class="icon iconfont">&#xe72a;</i>
         <input type="password" placeholder="密码" v-model.trim="passWord">
       </div>
-      <button class="bt-login" @click="_goto()">登陆</button>
+      <button class="bt-login" @click="_login()">登陆</button>
     </div>
   </div>
 </template>
 
 <script>
   import { loginApi } from '@/api/login'
+  import { getGatewayListApi } from '@/api/gatewayInfo'
   import { mapActions } from 'vuex'
 
   export default {
     data () {
       return {
-        userName: 'admin',
+        userName: 'lyh',
         passWord: '123456'
       }
     },
@@ -50,28 +51,89 @@
       // 登陆
       _login () {
         if (!this.userName) {
-          this.openAlert('账户/手机号不能为空')
+          // this.openAlert('账户/手机号不能为空')
+          wx.showToast({
+            title: '账户/手机号不能为空',
+            icon: 'none',
+            duration: 2000
+          })
           return
         }
         if (!this.passWord) {
-          this.openAlert('密码不能为空')
+          // this.openAlert('密码不能为空')
+          wx.showToast({
+            title: '密码不能为空',
+            icon: 'none',
+            duration: 2000
+          })
           return
         }
         loginApi({username: this.userName, password: this.passWord}).then(response => {
           if (response.success) {
+            wx.showLoading({
+              title: '加载中',
+              mask: true
+            })
             // 存下所有的用户数据
             this.setUserInfo(response).then(() => {
-              // 进入首页
-              this._goto()
+              // 存下主机数据
+              this._getGatewayData(response.content.userInfo.id).then(() => {
+                // 进入首页
+                this._goto()
+              })
+            })
+          } else {
+            wx.showToast({
+              title: response.message,
+              icon: 'none',
+              duration: 3000,
+              mask: true
             })
           }
+        })
+        .catch(error => {
+          wx.showToast({
+            title: error,
+            icon: 'none',
+            duration: 3000,
+            mask: true
+          })
+        })
+      },
+      // 获取主机列表
+      _getGatewayData (userId) {
+        return new Promise((resolve, reject) => {
+          // 得到需要的配电数据
+          getGatewayListApi({userId}).then(response => {
+            if (response.success) {
+              this.setGatewayData(response.content).then(() => {
+                resolve()
+              })
+            } else {
+              wx.showToast({
+                title: '获取初始化数据失败',
+                icon: 'none',
+                duration: 3000,
+                mask: true
+              })
+              reject()
+            }
+          })
+          .catch(error => {
+            wx.showToast({
+              title: error,
+              icon: 'none',
+              duration: 3000,
+              mask: true
+            })
+            reject()
+          })
         })
       },
       // 跳转
       _goto () {
         wx.switchTab({
           url: '/pages/home/main'
-          // url: '/pages/data_analysis/main'
         })
       },
       // 弹窗
@@ -87,7 +149,8 @@
         })
       },
       ...mapActions([
-        'setUserInfo'
+        'setUserInfo',
+        'setGatewayData'
       ])
     }
   }

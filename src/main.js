@@ -30,7 +30,7 @@ export default {
       color: '#6a6a6f',
       selectedColor: '#eaa01d',
       borderStyle: 'white',
-      backgroundColor: '#252939',
+      backgroundColor: 'rgb(230, 230, 230)',
       list: [
         {
           text: '首页',
@@ -39,16 +39,10 @@ export default {
           selectedIconPath: 'static/images/tabbar/home1.png'
         },
         {
-          text: '综合评比',
-          pagePath: 'pages/synthesize_rating/main',
+          text: '情景',
+          pagePath: 'pages/scene/main',
           iconPath: 'static/images/tabbar/rating.png',
           selectedIconPath: 'static/images/tabbar/rating1.png'
-        },
-        {
-          text: '数据分析',
-          pagePath: 'pages/data_analysis/main',
-          iconPath: 'static/images/tabbar/analyze.png',
-          selectedIconPath: 'static/images/tabbar/analyze1.png'
         }
       ]
     }
