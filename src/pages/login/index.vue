@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="logo">
+    <!-- <div class="logo">
       <img src="/static/images/logo-a.png">
     </div>
     <div class="login-form">
@@ -13,7 +13,7 @@
         <input type="password" placeholder="密码" v-model.trim="passWord">
       </div>
       <button class="bt-login" @click="_login()">登陆</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -25,17 +25,19 @@
   export default {
     data () {
       return {
-        userName: 'lyh',
-        passWord: '123456'
+        userName: '',
+        passWord: ''
       }
     },
     created () {
       // 调用应用实例的方法获取全局数据
       // this.getUserInfo()
+
+      this.QRlogin()
     },
     methods: {
       // 得到微信的信息
-      getUserInfo () {
+      _getUserInfo () {
         // 调用登录接口
         wx.login({
           success: () => {
@@ -45,6 +47,21 @@
                 console.log(this.userInfo)
               }
             })
+          }
+        })
+      },
+      // 扫码登陆
+      QRlogin () {
+        // 只允许从相机扫码
+        wx.scanCode({
+          // onlyFromCamera: true,
+          success: (res) => {
+            let userInfo = JSON.parse(res.result)
+            this.userName = userInfo.username
+            this.passWord = userInfo.password
+            this._login()
+          },
+          fail: () => {
           }
         })
       },
@@ -83,6 +100,7 @@
               })
             })
           } else {
+            this.QRlogin()
             wx.showToast({
               title: response.message,
               icon: 'none',

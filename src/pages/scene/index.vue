@@ -73,15 +73,15 @@
         executeModApi(parameter).then(response => {
           if (response.success) {
             wx.showToast({
-              title: '情景执行中',
+              title: '情景执行中...',
               icon: 'none',
-              duration: 3000
+              duration: 2000
             })
           } else {
             wx.showToast({
               title: response.message,
               icon: 'none',
-              duration: 3000
+              duration: 2000
             })
           }
         })
@@ -89,7 +89,7 @@
           wx.showToast({
             title: error,
             icon: 'none',
-            duration: 3000
+            duration: 2000
           })
         })
       }
