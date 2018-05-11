@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <!-- <div class="logo">
+    <div class="logo">
       <img src="/static/images/logo-a.png">
     </div>
     <div class="login-form">
@@ -13,7 +13,7 @@
         <input type="password" placeholder="密码" v-model.trim="passWord">
       </div>
       <button class="bt-login" @click="_login()">登陆</button>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -25,15 +25,15 @@
   export default {
     data () {
       return {
-        userName: '',
-        passWord: ''
+        userName: 'lyh',
+        passWord: '123456'
       }
     },
     created () {
       // 调用应用实例的方法获取全局数据
       // this.getUserInfo()
 
-      this.QRlogin()
+      // this.QRlogin()
     },
     methods: {
       // 得到微信的信息
@@ -96,7 +96,8 @@
               // 存下主机数据
               this._getGatewayData(response.content.userInfo.id).then(() => {
                 // 进入首页
-                this._goto()
+                // this._goto()
+                this.ConnectWebsocket()
               })
             })
           } else {
@@ -168,6 +169,7 @@
       },
       ...mapActions([
         'setUserInfo',
+        'ConnectWebsocket',
         'setGatewayData'
       ])
     }

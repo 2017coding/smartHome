@@ -1,11 +1,11 @@
 import fly from '../utils/fly'
 
-// 将数据转换为非json
-const querystring = require('qs')
-let data
+// // 将数据转换为非json
+// const querystring = require('qs')
+// let data
 
 // websocket
-export function socketApi (parameter) {
+export function socketApi (data) {
   return fly.post('/api/back/control/getWebSocketInfo', data)
 }
 
