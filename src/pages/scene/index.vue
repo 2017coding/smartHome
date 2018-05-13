@@ -8,6 +8,11 @@
         {{item.modName}}
       </span>
     </div>
+    <p
+      v-if="sceneList.length === 0"
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; font-weight: bold; ">
+      当前暂无情景
+    </p>
   </div>
 </template>
 
@@ -18,7 +23,8 @@
   export default {
     computed: {
       ...mapGetters([
-        'userInfo'
+        'userInfo',
+        'selectGatewayInfo'
       ])
     },
     data () {
@@ -43,13 +49,36 @@
       }
     },
     created () {
+      this.$watch('selectGatewayInfo', () => {
+        this.initData()
+      })
+    },
+    // 下拉刷新
+    onPullDownRefresh () {
       this.initData()
     },
     methods: {
       // 情景数据初始化
       initData () {
-        getModListApi({gatewayCode: '6003000000BA'}).then(response => {
+        wx.showNavigationBarLoading() // 在标题栏中显示加载
+        getModListApi({gatewayCode: this.selectGatewayInfo.gatewayCode}).then(response => {
           this.sceneList = response.success ? response.content : []
+
+          setTimeout(() => {
+            wx.hideNavigationBarLoading() // 完成停止加载
+          }, 150)
+          wx.stopPullDownRefresh() // 停止下拉刷新
+        })
+        .catch(error => {
+          wx.showToast({
+            title: error,
+            icon: 'none',
+            duration: 2000
+          })
+          setTimeout(() => {
+            wx.hideNavigationBarLoading() // 完成停止加载
+          }, 150)
+          wx.stopPullDownRefresh() // 停止下拉刷新
         })
       },
       // 执行情景
@@ -103,20 +132,33 @@
   .scene{
     position: relative;
     .scene-item{
-      @include center($type: true);
-      margin-top: 10px;
-      height: 40px;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      margin-top: calc(7vw / 4);
+      margin-left: calc(7vw / 4);
+      width: 31vw;
+      height: 31vw;
       background: $backgorund;
+      border-radius: 5%;
+      // @include center($type: true);
+      // margin-top: 10px;
+      // height: 40px;
+      // background: $backgorund;
       .pic{
         @include center($type: true);
-        padding-right: 20px;
+        flex: 1;
+        // padding-right: 20px;
         img{
-          width: 35px;
-          height: 35px; 
+          width: 50px;
+          height: 50px; 
         }
       }
       .name{
-        flex: 1;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        @include textHide();
       }
     }
   }

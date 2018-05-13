@@ -1,7 +1,7 @@
 import {
   setToken,
   getToken,
-  setUserInfo,
+  // setUserInfo,
   getUserInfo
 } from '@/utils/storage'
 
@@ -29,7 +29,7 @@ const user = {
         // 如果是admin账号 则将它的公司ID设为-1
         data.content.userInfo.companyId = ((data.content.userInfo.companyId + '') === '0') ? '-1' : data.content.userInfo.companyId
         setToken(data.token)
-        setUserInfo(data.content.userInfo)
+        // setUserInfo(data.content.userInfo)
 
         commit('SET_TOKEN', data.token)
         commit('SET_USERINFO', data.content.userInfo)

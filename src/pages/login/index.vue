@@ -19,7 +19,6 @@
 
 <script>
   import { loginApi } from '@/api/login'
-  import { getGatewayListApi } from '@/api/gatewayInfo'
   import { mapActions } from 'vuex'
 
   export default {
@@ -93,12 +92,8 @@
             })
             // 存下所有的用户数据
             this.setUserInfo(response).then(() => {
-              // 存下主机数据
-              this._getGatewayData(response.content.userInfo.id).then(() => {
-                // 进入首页
-                // this._goto()
-                this.ConnectWebsocket()
-              })
+              // 进入首页
+              this._goto()
             })
           } else {
             this.QRlogin()
@@ -116,36 +111,6 @@
             icon: 'none',
             duration: 3000,
             mask: true
-          })
-        })
-      },
-      // 获取主机列表
-      _getGatewayData (userId) {
-        return new Promise((resolve, reject) => {
-          // 得到需要的配电数据
-          getGatewayListApi({userId}).then(response => {
-            if (response.success) {
-              this.setGatewayData(response.content).then(() => {
-                resolve()
-              })
-            } else {
-              wx.showToast({
-                title: '获取初始化数据失败',
-                icon: 'none',
-                duration: 3000,
-                mask: true
-              })
-              reject()
-            }
-          })
-          .catch(error => {
-            wx.showToast({
-              title: error,
-              icon: 'none',
-              duration: 3000,
-              mask: true
-            })
-            reject()
           })
         })
       },
@@ -168,9 +133,7 @@
         })
       },
       ...mapActions([
-        'setUserInfo',
-        'ConnectWebsocket',
-        'setGatewayData'
+        'setUserInfo'
       ])
     }
   }
