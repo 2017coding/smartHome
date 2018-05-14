@@ -25,15 +25,19 @@ import { mapActions } from 'vuex'
 export default {
   data () {
     return {
-      userName: 'lyh',
-      passWord: '123456'
+      userName: '',
+      passWord: ''
     }
   },
   created () {
     // 调用应用实例的方法获取全局数据
     // this.getUserInfo()
 
-    // this.QRlogin()
+    // 初始化数据
+    if (wx.getStorageSync('username') && wx.getStorageSync('password')) {
+      this.userName = wx.getStorageSync('username')
+      this.passWord = wx.getStorageSync('password')
+    }
   },
   methods: {
     // 得到微信的信息
@@ -63,7 +67,7 @@ export default {
         },
         fail: () => {
           wx.redirectTo({
-            url: '/pages/lgoin/main'
+            url: '/pages/login/main'
           })
         }
       })
@@ -108,6 +112,10 @@ export default {
       }
       loginApi({ username: this.userName, password: this.passWord }).then(response => {
         if (response.success) {
+          // 登录成功后存下用户数据
+          wx.setStorageSync('username', this.userName)
+          wx.setStorageSync('password', this.passWord)
+
           wx.showLoading({
             title: '加载中',
             mask: true
@@ -126,7 +134,7 @@ export default {
           })
           if (type === 'QRlogin') {
             wx.redirectTo({
-              url: '/pages/lgoin/main'
+              url: '/pages/login/main'
             })
           }
         }

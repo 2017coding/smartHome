@@ -4,6 +4,9 @@
     <picker class="weui-btn" @change="_pickerChange" :value="indexPicker" :range="gatewayNameList">
       <i class="icon iconfont gateway-more">&#xe73b;</i>
     </picker>
+    <div class="login-out" @click="_loginOut">
+      <i class="icon iconfont">&#xe773;</i>
+    </div>
     <div class="area">
       <div class="area-title">
         {{selectGatewayInfo.zoneList[zoneIndex] ? selectGatewayInfo.zoneList[zoneIndex].zoneName : ''}}
@@ -18,14 +21,16 @@
         @change="_swiperChange">
         <div v-for="(item, index) in selectGatewayInfo.zoneList" :key="index">
           <swiper-item>
-            <image :src="item.zonePhoto || 'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg'" class="slide-image"/>
+            <image class="swiper-image" :src="item.zonePhoto || 'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg'"/>
           </swiper-item>
         </div>
       </swiper>
     </div>
     <ul class="device-list" v-if="selectGatewayInfo.zoneList[zoneIndex]">
       <li class="device-item" v-for="(item, index) in selectGatewayInfo.zoneList[zoneIndex].deviceList" :key="index">
-        <i class="icon"></i>
+        <!-- <div class="icon">
+          <img :src="item.eleIcon">
+        </div> -->
         <span class="name">{{item.eleName}}</span>
         <div class="control">
           <span class="control-item control-item-left" @click="_controlDevice('open', item)"  v-if="item.parameterList">开</span>
@@ -192,8 +197,31 @@ export default {
         })
       })
     },
+    // 退出登录
+    _loginOut () {
+      let _this = this
+      wx.showModal({
+        title: '退出登录',
+        content: '是否退出登录?',
+        confirmText: '确定',
+        cancelText: '取消',
+        success: function (res) {
+          if (res.confirm) {
+            // 清除数据
+            _this.loginOut().then(() => {
+              // 跳转到登录页面
+              wx.reLaunch({
+                url: '/pages/login/main'
+              })
+            })
+          } else {
+          }
+        }
+      })
+    },
     ...mapActions([
-      'setGatewayData'
+      'setGatewayData',
+      'loginOut'
     ]),
     ...mapMutations({
       SETSELECTGATEWAYINFO: 'SET_SELECTGATEWAYINFO'
@@ -211,11 +239,19 @@ export default {
   // flex-direction: column;
   position: relative;
   .gateway-more{
-    padding: 0 20px 0 0;
-    position: fixed;
+    padding-right: 20px;
     left: 0;
+  }
+  .login-out{
+    padding-left: 20px;
+    padding-right: 10px;
+    right: 0;
+  }
+  .gateway-more, .login-out{
+    position: fixed;
     top: 0;
-    line-height: 40px;
+    height: 40px;
+    @include center($type: true);
     font-size: 36px;
     font-weight: bold;
     z-index: 10;
@@ -235,10 +271,12 @@ export default {
       background: white;
       z-index: 9;
       @include textHide();
+      box-shadow: 0 0 5px rgb(100, 100, 100)
     }
     ._swiper{
       margin-top: 40px;
-      image{
+      height: 200px;
+      .swiper-image{
         width: 100%;
       }
     }
@@ -255,6 +293,12 @@ export default {
       height: 31vw;
       background: $backgorund;
       border-radius: 5%;
+      .icon{
+        img{
+          width: 30px;
+          height: 30px;
+        }
+      }
       .name{
         @include center($type: true);
         flex: 1;
@@ -269,6 +313,11 @@ export default {
         display: inline-block;
         text-align: center;
         width: 50%;
+        font-weight: bold;
+        color: red;
+      }
+      .control-item-left{
+        color: #21ac70;
       }
       .control::after{
         position: absolute;

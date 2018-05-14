@@ -3,6 +3,7 @@ import {
   // setGatewayDataStorage,
   getGatewayDataStorage
 } from '@/utils/storage'
+import { getDeviceInfo } from '@/utils/config'
 // import { socketApi } from '@/api/device'
 
 const app = {
@@ -46,6 +47,7 @@ const app = {
                 obj.eleName = nameList[i]
                 obj.eleID = deviceItem.eleID
                 obj.eleType = deviceItem.eleType
+                obj.eleIcon = getDeviceInfo(deviceItem.eleType).icon
                 if (deviceItem.parameterList) {
                   obj.parameterList = []
                   obj.parameterList[0] = deviceItem.parameterList[i]
@@ -66,6 +68,16 @@ const app = {
           commit('SET_SELECTGATEWAYINFO', newData[0] ? newData[0] : '')
         }
         resolve(newData)
+      })
+    },
+    // 退出登录
+    loginOut ({
+      commit
+    }, data) {
+      return new Promise((resolve, reject) => {
+        // 清除token
+        wx.removeStorageSync('token')
+        resolve()
       })
     }
   }
