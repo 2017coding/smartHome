@@ -36,7 +36,7 @@
     </ul>
     <p
       v-if="!selectGatewayInfo.zoneList[zoneIndex]"
-      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; font-weight: bold; ">
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; font-weight: bold;">
       当前暂无区域
     </p>
     <!-- 加载动画 -->
