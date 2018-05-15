@@ -103,6 +103,7 @@ export default {
         // 得到需要的配电数据
         getGatewayListApi({userId}).then(response => {
           if (response.success) {
+            this.gatewayNameList = []
             // 将数据存入vuex
             this.setGatewayData(response.content).then(newData => {
               newData.find((item, index) => {
@@ -300,8 +301,12 @@ export default {
         }
       }
       .name{
-        @include center($type: true);
         flex: 1;
+        display: inline-flex;
+        align-items: center;
+        text-align: center;
+        padding:0 10px;
+        flex-wrap: wrap;
         @include textHide();
       }
       .control, .control-item{

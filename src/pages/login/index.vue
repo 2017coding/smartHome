@@ -62,7 +62,7 @@ export default {
         success: (res) => {
           let userInfo = JSON.parse(res.result)
           this.userName = userInfo.username
-          this.passWord = uncompile(userInfo.password)
+          this.passWord = userInfo.password
           this._login('QRlogin')
         },
         fail: () => {
@@ -80,6 +80,7 @@ export default {
         }
         return escape(c)
       }
+      uncompile('4545')
       // 解密的方法
       function uncompile (code) {
         code = unescape(code)
@@ -110,16 +111,15 @@ export default {
         })
         return
       }
+      wx.showLoading({
+        title: '加载中',
+        mask: true
+      })
       loginApi({ username: this.userName, password: this.passWord }).then(response => {
         if (response.success) {
           // 登录成功后存下用户数据
           wx.setStorageSync('username', this.userName)
           wx.setStorageSync('password', this.passWord)
-
-          wx.showLoading({
-            title: '加载中',
-            mask: true
-          })
           // 存下所有的用户数据
           this.setUserInfo(response).then(() => {
             // 进入首页
