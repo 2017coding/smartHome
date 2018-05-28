@@ -9,7 +9,7 @@ const fly = new Fly()
 fly.config.timeout = 5000
 
 // 配置请求基地址
-fly.config.baseURL = 'http://www.zwrtmqtt.top:9527'
+fly.config.baseURL = 'https://www.zwrtmqtt.top'
 
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {

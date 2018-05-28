@@ -9,7 +9,7 @@
     </div>
     <div class="area">
       <div class="area-title">
-        {{selectGatewayInfo.zoneList[zoneIndex] ? selectGatewayInfo.zoneList[zoneIndex].zoneName : ''}}
+        {{selectGatewayInfo.zoneList && selectGatewayInfo.zoneList[zoneIndex] ? selectGatewayInfo.zoneList[zoneIndex].zoneName : ''}}
       </div>
       <swiper
         v-if="selectGatewayInfo.zoneList[zoneIndex]"

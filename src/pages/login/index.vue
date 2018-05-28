@@ -14,6 +14,7 @@
       </div>
       <button class="bt-login" @click="_login()">登陆</button>
       <button class="bt-qr-login" @click="_QRlogin()">扫码登录</button>
+      <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGetUserInfo" style="margin-top: 10px;">获取用户信息</button>
     </div>
   </div>
 </template>
@@ -30,30 +31,21 @@ export default {
     }
   },
   created () {
-    // 调用应用实例的方法获取全局数据
-    // this.getUserInfo()
-
     // 初始化数据
     if (wx.getStorageSync('username') && wx.getStorageSync('password')) {
       this.userName = wx.getStorageSync('username')
       this.passWord = wx.getStorageSync('password')
     }
   },
+  onGetUserInfo (e) {
+    console.log(e.detail)
+    wx.login({
+      success: function (res) {
+        console.log(res)
+      }
+    })
+  },
   methods: {
-    // 得到微信的信息
-    _getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-              console.log(this.userInfo)
-            }
-          })
-        }
-      })
-    },
     // 扫码登陆
     _QRlogin () {
       // 只允许从相机扫码
@@ -122,10 +114,16 @@ export default {
           wx.setStorageSync('password', this.passWord)
           // 存下所有的用户数据
           this.setUserInfo(response).then(() => {
+            setTimeout(() => {
+              wx.hideLoading()
+            }, 150)
             // 进入首页
             this._goto()
           })
         } else {
+          setTimeout(() => {
+            wx.hideLoading()
+          }, 150)
           wx.showToast({
             title: response.message,
             icon: 'none',
@@ -140,6 +138,9 @@ export default {
         }
       })
         .catch(error => {
+          setTimeout(() => {
+            wx.hideLoading()
+          }, 150)
           wx.showToast({
             title: error,
             icon: 'none',
@@ -198,6 +199,7 @@ $imgSize: 20vh;
     padding: 0 20px;
     .input {
       @include center($type: false);
+      font-size: 14px;
       position: relative;
       margin-bottom: 20px;
     }
